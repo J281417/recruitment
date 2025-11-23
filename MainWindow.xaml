@@ -75,8 +75,8 @@
                             </Expander>
                             </Border>
                             <StackPanel Orientation="Horizontal" Margin="5">
-                                <!--<CheckBox x:Name="ChkShowAvailable" Content="Available" Checked="ChkShowAvailable_Changed" Unchecked="ChkShowAvailable_Changed"/>-->
-                                <CheckBox x:Name="ChkShowAvailable" Content="Available" />
+                                <CheckBox x:Name="ChkShowAvailable" Content="Available" Checked="ChkShowAvailable_Changed" Unchecked="ChkShowAvailable_Changed"/>
+                                <!--<CheckBox x:Name="ChkShowAvailable" Content="Available" />-->
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
@@ -132,19 +132,19 @@
                                             <Label Content="Date"/>
                                             <DatePicker x:Name="DpJobDate" Width="100" SelectedDate="{x:Static sys:DateTime.Now}"/>
                                         </StackPanel>
-                                        <!--<Button x:Name="BtnCreateJob" Content="Create Job" Width="200" Click="BtnCreateJob_Click"/>-->
-                                        <Button x:Name="BtnCreateJob" Content="Create Job" Width="200"/>
+                                        <Button x:Name="BtnCreateJob" Content="Create Job" Width="200" Click="BtnCreateJob_Click"/>
+                                        <!--<Button x:Name="BtnCreateJob" Content="Create Job" Width="200"/>-->
                                     </StackPanel>
                                 </Expander>
                             </Border>
                             <StackPanel Orientation="Horizontal" Margin="5">
                                 <StackPanel Orientation="Vertical">
-                                    <!--<Button x:Name="BtnAssign" Content="Assign Contractor to Job" Width="250" Click="BtnAssign_Click" Margin="0,0,5,5"/>-->
-                                    <Button x:Name="BtnAssign" Content="Assign Contractor to Job" Width="250"  Margin="0,0,5,5"/>
+                                    <Button x:Name="BtnAssign" Content="Assign Contractor to Job" Width="250" Click="BtnAssign_Click" Margin="0,0,5,5"/>
+                                    <!--<Button x:Name="BtnAssign" Content="Assign Contractor to Job" Width="250"  Margin="0,0,5,5"/>-->
                                     <!--<Button x:Name="BtnCompleteJob" Content="Complete Selected Job" Width="250" Click="BtnCompleteJob_Click"  Margin="0,0,5,5"/>-->
                                     <Button x:Name="BtnCompleteJob" Content="Complete Selected Job" Width="250"  Margin="0,0,5,5"/>
-                                    <!--<CheckBox x:Name="ChkShowUnassignedJobs" Content="Unassigned" Checked="ChkShowUnassignedJobs_Changed" Unchecked="ChkShowUnassignedJobs_Changed"  Margin="0,0,5,5"/>-->
-                                    <CheckBox x:Name="ChkShowUnassignedJobs" Content="Unassigned" Margin="0,0,5,5"/>
+                                    <CheckBox x:Name="ChkShowUnassignedJobs" Content="Unassigned" Checked="ChkShowUnassignedJobs_Changed" Unchecked="ChkShowUnassignedJobs_Changed"  Margin="0,0,5,5"/>
+                                    <!--<CheckBox x:Name="ChkShowUnassignedJobs" Content="Unassigned" Margin="0,0,5,5"/> -->
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -158,7 +158,6 @@
                             <GridViewColumn Header="Title" Width="160" DisplayMemberBinding="{Binding Title}"/>
                             <GridViewColumn Header="Cost" Width="80" DisplayMemberBinding="{Binding Cost}"/>
                             <GridViewColumn Header="Assigned To" Width="160" DisplayMemberBinding="{Binding AssignedContractorName}"/>
-                            <GridViewColumn Header="Date"  Width="75" DisplayMemberBinding="{Binding JobDate, StringFormat={}{0:dd/MM/yyyy}}"/>
                             <GridViewColumn Header="Completed" Width="75" DisplayMemberBinding="{Binding IsCompleted}"/>
                         </GridView>
                     </ListView.View>

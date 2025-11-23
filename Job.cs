@@ -14,6 +14,7 @@ namespace recruitment
         public string Description { get; set; }
         public decimal Cost { get; set; }
         public Contractor AssignedContractor { get; set; }
+        public string AssignedContractorName { get; set; }
         public bool IsCompleted { get; set; }
 
         public Job(string title, string description, decimal cost)

@@ -34,25 +34,43 @@ namespace recruitment
         {
             return Contractors;
         }
+
+        public List<Contractor> GetAvailableContractors()
+        {
+            return Contractors
+                .Where(c => !Jobs.Any(j => j.AssignedContractor == c && !j.IsCompleted))
+                .ToList();
+        }
+
         public void AddJob(Job job)
         {
             Jobs.Add(job);
         }
 
-        public List<Contractor> GetAvailableContractors()
+        public List<Job> GetJobs()
         {
-            if (Contractors == null)
-                Contractors = new List<Contractor>();
-
-            if (Jobs == null)
-                Jobs = new List<Job>();
-
-
-
-            return Contractors
-                .Where(c => !Jobs.Any(j => j.AssignedContractor == c && !j.IsCompleted))
-                .ToList();
+            return Jobs;
         }
+
+        public List<Job> GetUnassignedJobs()
+        {
+            return Jobs.Where(j => j.AssignedContractor == null && !j.IsCompleted).ToList();
+        }
+
+        public void AssignJob(Job job, Contractor contractor)
+        {
+            if (job != null && contractor != null && !Jobs.Contains(job))
+                throw new Exception("Job does not exist in the system.");
+
+            if (!GetAvailableContractors().Contains(contractor))
+                throw new Exception("Contractor is not available.");
+
+            job.AssignedContractor = contractor;
+            job.AssignedContractorName = $"{contractor.FirstName} {contractor.LastName}"; ;
+            contractor.IsAssigned = true;
+        }
+
+
 
     }
 
