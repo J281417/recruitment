@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
+using System.DirectoryServices;
 using System.DirectoryServices.ActiveDirectory;
 using System.Globalization;
 using System.Text;
@@ -26,7 +27,7 @@ namespace recruitment
          private ObservableCollection<Job> _unassignedJobs = new ObservableCollection<Job>();
         */
         
-        private RecruitmentSystem recruitmentSystem;
+        public RecruitmentSystem recruitmentSystem;
 
         // Views used for filtering and binding to UI elements.
         //private ICollectionView _contractorsView;
@@ -51,7 +52,9 @@ namespace recruitment
 
             // Seed some sample data (optional - helpful for testing)
             SeedSampleData();
-            RefreshUI();
+            RefreshContractors();
+            RefreshJobs();
+
             //RefreshAvailableContractors();
             //RefreshUnassignedJobs()
         }
@@ -141,21 +144,6 @@ namespace recruitment
 
         }
 
-        private void RefreshUI()
-        {
-            LvContractors.ItemsSource = null;
-            LvContractors.ItemsSource = recruitmentSystem.GetContractors();
-
-            LvContractors.ItemsSource = null;
-            LvContractors.ItemsSource = recruitmentSystem.GetContractors();
-
-            LvJobs.ItemsSource = null;
-            LvJobs.ItemsSource = recruitmentSystem.GetJobs();
-
-            LvJobs.ItemsSource = null;
-            LvJobs.ItemsSource = recruitmentSystem.GetUnassignedJobs();
-        }
-        
         private void RefreshContractors()
         {
             LvContractors.ItemsSource = null;
@@ -339,68 +327,31 @@ namespace recruitment
 
        }
         #endregion
-        /*
-       #region Filters & Search
-       private void ChkShowOnlyAvailable_Checked(object sender, RoutedEventArgs e)
-       {
-           if (ChkShowAvailable.IsChecked == true)
-           {
-               _contractorsView.Filter = (obj) =>
-               {
-                   if (obj is Contractor c)
-                       return !c.IsAssigned;
-                   return false;
-               };
-           }
-           else
-           {
-               _contractorsView.Filter = null;
-           }
-       }
 
-       private void ChkShowOnlyUnassigned_Checked(object sender, RoutedEventArgs e)
-       {
-           if (ChkShowUnassignedJobs.IsChecked == true)
-           {
-               _jobsView.Filter = (obj) =>
-               {
-                   if (obj is Job j)
-                       return !j.IsAssigned && !j.IsCompleted;
-                   return false;
-               };
-           }
-           else
-           {
-               _jobsView.Filter = null;
-           }
-       }
+        #region Filters & Search
+
+
+
 
        /// Filter for contractor listbox.
        private void TxtSearchContractors_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
        {
+
+            
            string search = TxtSearchContractors.Text?.Trim().ToLowerInvariant() ?? string.Empty;
 
            if (string.IsNullOrWhiteSpace(search))
-           {
-               _contractorsView.Filter = null;
-               if (ChkShowAvailable.IsChecked == true)
-                   RefreshAvailableContractors();
-                   RefreshUnassignedJobs();
-                   ChkShowOnlyAvailable_Checked(null, null);
-               return;
-           }
+            {
+                RefreshContractors();
+            }
 
-           _contractorsView.Filter = (obj) =>
-           {
-               if (obj is Contractor c)
-               {
-                   bool matches = c.DisplayName.ToLowerInvariant().Contains(search);
-                   if (ChkShowAvailable.IsChecked == true)
-                       matches &= !c.IsAssigned;
-                   return matches;
-               }
-               return false;
-           };
+            var contractorsToShow = recruitmentSystem.GetContractors()
+                .Where(c => string.IsNullOrEmpty(search) ||
+                            c.FirstName.ToLower().Contains(search) ||
+                            c.LastName.ToLower().Contains(search)).ToList();
+
+            LvContractors.ItemsSource = contractorsToShow;
+
        }
 
        /// Filter for Jobs listbox.
@@ -409,32 +360,23 @@ namespace recruitment
            string search = TxtSearchJobs.Text?.Trim().ToLowerInvariant() ?? string.Empty;
 
            if (string.IsNullOrWhiteSpace(search))
-           {
-               _jobsView.Filter = null;
-               if (ChkShowUnassignedJobs.IsChecked == true)
-                   RefreshAvailableContractors();
-                   RefreshUnassignedJobs();
-                   ChkShowOnlyUnassigned_Checked(null, null);
-               return;
-           }
+            {
+                RefreshJobs();
+            }
 
-           _jobsView.Filter = (obj) =>
-           {
-               if (obj is Job j)
-               {
-                   bool matches = j.Title.ToLowerInvariant().Contains(search);
-                   if (ChkShowUnassignedJobs.IsChecked == true)
-                       matches &= !j.IsAssigned;
-                   return matches;
-               }
-               return false;
-           };
+            var jobsToShow = recruitmentSystem.GetJobs()
+                .Where(j => string.IsNullOrEmpty(search) ||
+                            j.Title.ToLower().Contains(search)).ToList();
+
+            LvJobs.ItemsSource = jobsToShow;
+
        }
+              
 
        /// Search jobs by cost range (report).
        private void BtnSearchCost_Click(object sender, RoutedEventArgs e)
        {
-           LbCostResults.Items.Clear();
+           LvReports.ItemsSource = null;
 
            string minText = TxtCostMin.Text?.Trim() ?? string.Empty;
            string maxText = TxtCostMax.Text?.Trim() ?? string.Empty;
@@ -452,17 +394,19 @@ namespace recruitment
                return;
            }
 
-           var results = _jobs.Where(j => j.Cost >= minVal && j.Cost <= maxVal).ToList();
-           foreach (var job in results)
-           {
-               // Show title and cost in the listbox content
-               LbCostResults.Items.Add(new { Title = $"{job.Title} — ${job.Cost:F2}", job.Id });
-           }
 
-           if (results.Count == 0)
-           {
-               MessageBox.Show("No jobs found in that cost range.", "Report", MessageBoxButton.OK, MessageBoxImage.Information);
-           }
+            // Show search result
+
+            var searchResult = recruitmentSystem.GetJobByCost(
+                    minVal,
+                    maxVal
+                );
+            LvReports.ItemsSource = searchResult;
+
+            if (searchResult.Count == 0)
+            {
+                MessageBox.Show("No jobs found in that cost range.", "Report", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
        }
        #endregion*/
 

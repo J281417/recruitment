@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace recruitment
 {
@@ -17,7 +20,7 @@ namespace recruitment
             Contractors = new List<Contractor>();
             Jobs = new List<Job>();
         }
-
+        
         public void AddContractor(Contractor person) {
 
             if (string.IsNullOrWhiteSpace(person.FirstName))
@@ -83,6 +86,24 @@ namespace recruitment
             job.IsCompleted = true;
             contractor.IsAssigned = false;
         }
+
+        public List<Job> GetJobByCost(decimal minCost, decimal maxCost)
+        {
+            List<Job> jobsByCost = new List<Job>();
+
+            foreach (Job job in Jobs)
+            {
+                if (job.Cost >= minCost && job.Cost <= maxCost)
+                {
+                    jobsByCost.Add(job);
+                }
+            }
+
+            return jobsByCost;
+        }
+
+
+
 
     }
 
