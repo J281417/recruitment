@@ -75,8 +75,14 @@ namespace recruitment
             job.AssignedContractorName = $"{contractor.FirstName} {contractor.LastName}"; ;
             contractor.IsAssigned = true;
         }
+        public void CompleteJob(Job job, Contractor contractor)
+        {
+            if (job.AssignedContractor == null)
+                throw new Exception("Cannot complete an unassigned job.");
 
-
+            job.IsCompleted = true;
+            contractor.IsAssigned = false;
+        }
 
     }
 

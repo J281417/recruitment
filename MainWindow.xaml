@@ -141,8 +141,8 @@
                                 <StackPanel Orientation="Vertical">
                                     <Button x:Name="BtnAssign" Content="Assign Contractor to Job" Width="250" Click="BtnAssign_Click" Margin="0,0,5,5"/>
                                     <!--<Button x:Name="BtnAssign" Content="Assign Contractor to Job" Width="250"  Margin="0,0,5,5"/>-->
-                                    <!--<Button x:Name="BtnCompleteJob" Content="Complete Selected Job" Width="250" Click="BtnCompleteJob_Click"  Margin="0,0,5,5"/>-->
-                                    <Button x:Name="BtnCompleteJob" Content="Complete Selected Job" Width="250"  Margin="0,0,5,5"/>
+                                    <Button x:Name="BtnCompleteJob" Content="Complete Selected Job" Width="250" Click="BtnCompleteJob_Click"  Margin="0,0,5,5"/>
+                                    <!--<Button x:Name="BtnCompleteJob" Content="Complete Selected Job" Width="250"  Margin="0,0,5,5"/>-->
                                     <CheckBox x:Name="ChkShowUnassignedJobs" Content="Unassigned" Checked="ChkShowUnassignedJobs_Changed" Unchecked="ChkShowUnassignedJobs_Changed"  Margin="0,0,5,5"/>
                                     <!--<CheckBox x:Name="ChkShowUnassignedJobs" Content="Unassigned" Margin="0,0,5,5"/> -->
                                 </StackPanel>
@@ -156,6 +156,7 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Title" Width="160" DisplayMemberBinding="{Binding Title}"/>
+                            <GridViewColumn Header="Date" Width="80" DisplayMemberBinding="{Binding Date, StringFormat={}{0:dd/MM/yyyy}}"/>
                             <GridViewColumn Header="Cost" Width="80" DisplayMemberBinding="{Binding Cost}"/>
                             <GridViewColumn Header="Assigned To" Width="160" DisplayMemberBinding="{Binding AssignedContractorName}"/>
                             <GridViewColumn Header="Completed" Width="75" DisplayMemberBinding="{Binding IsCompleted}"/>

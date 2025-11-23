@@ -75,21 +75,21 @@ namespace recruitment
             recruitmentSystem.AddContractor(new Contractor("Drax", "Destroyer", DateTime.Now.AddMonths(-5), 60));
             recruitmentSystem.AddContractor(new Contractor("Vision", "Synth", DateTime.Now.AddMonths(-14), 95));
 
-            recruitmentSystem.AddJob(new Job("Kitchen Renovation", "Complete kitchen remodeling", 5000));
-            recruitmentSystem.AddJob(new Job("Bathroom Upgrade", "Install new tiles and fixtures", 3000));
-            recruitmentSystem.AddJob(new Job("Living Room Paint", "Paint walls and ceiling", 1200));
-            recruitmentSystem.AddJob(new Job("Roof Repair", "Fix leaks and replace damaged shingles", 4500));
-            recruitmentSystem.AddJob(new Job("Flooring Installation", "Install hardwood floors in living room", 3500));
-            recruitmentSystem.AddJob(new Job("Garage Renovation", "Organize space and add storage cabinets", 2800));
-            recruitmentSystem.AddJob(new Job("Basement Waterproofing", "Seal basement walls and floor", 6000));
-            recruitmentSystem.AddJob(new Job("Patio Construction", "Build stone patio with seating area", 4000));
-            recruitmentSystem.AddJob(new Job("Window Replacement", "Replace old windows with energy-efficient ones", 2500));
-            recruitmentSystem.AddJob(new Job("Door Installation", "Install front and back doors", 1800));
-            recruitmentSystem.AddJob(new Job("Deck Construction", "Build wooden deck in backyard", 4200));
-            recruitmentSystem.AddJob(new Job("Fence Installation", "Install wooden fence around property", 3200));
-            recruitmentSystem.AddJob(new Job("Lighting Upgrade", "Replace indoor lighting with LED fixtures", 1500));
-            recruitmentSystem.AddJob(new Job("HVAC Maintenance", "Service and repair heating/cooling system", 2200));
-            recruitmentSystem.AddJob(new Job("Exterior Painting", "Paint house exterior and trim", 3800));
+            recruitmentSystem.AddJob(new Job("Kitchen Renovation", "Complete kitchen remodeling", DateTime.Now.AddMonths(-12), 5000));
+            recruitmentSystem.AddJob(new Job("Bathroom Upgrade", "Install new tiles and fixtures", DateTime.Now.AddMonths(-12), 3000));
+            recruitmentSystem.AddJob(new Job("Living Room Paint", "Paint walls and ceiling", DateTime.Now.AddMonths(-12), 1200));
+            recruitmentSystem.AddJob(new Job("Roof Repair", "Fix leaks and replace damaged shingles", DateTime.Now.AddMonths(-12), 4500));
+            recruitmentSystem.AddJob(new Job("Flooring Installation", "Install hardwood floors in living room", DateTime.Now.AddMonths(-12), 3500));
+            recruitmentSystem.AddJob(new Job("Garage Renovation", "Organize space and add storage cabinets", DateTime.Now.AddMonths(-12), 2800));
+            recruitmentSystem.AddJob(new Job("Basement Waterproofing", "Seal basement walls and floor", DateTime.Now.AddMonths(-12), 6000));
+            recruitmentSystem.AddJob(new Job("Patio Construction", "Build stone patio with seating area", DateTime.Now.AddMonths(-12), 4000));
+            recruitmentSystem.AddJob(new Job("Window Replacement", "Replace old windows with energy-efficient ones", DateTime.Now.AddMonths(-12), 2500));
+            recruitmentSystem.AddJob(new Job("Door Installation", "Install front and back doors", DateTime.Now.AddMonths(-12), 1800));
+            recruitmentSystem.AddJob(new Job("Deck Construction", "Build wooden deck in backyard", DateTime.Now.AddMonths(-12), 4200));
+            recruitmentSystem.AddJob(new Job("Fence Installation", "Install wooden fence around property", DateTime.Now.AddMonths(-12), 3200));
+            recruitmentSystem.AddJob(new Job("Lighting Upgrade", "Replace indoor lighting with LED fixtures", DateTime.Now.AddMonths(-12), 1500));
+            recruitmentSystem.AddJob(new Job("HVAC Maintenance", "Service and repair heating/cooling system", DateTime.Now.AddMonths(-12), 2200));
+            recruitmentSystem.AddJob(new Job("Exterior Painting", "Paint house exterior and trim", DateTime.Now.AddMonths(-12), 3800));
 
         }
         #endregion
@@ -161,7 +161,7 @@ namespace recruitment
             LvContractors.ItemsSource = null;
 
             // If checkbox is checked, filter only unassigned contractors
-            var contractorsToShow = ChkShowAvailable.IsChecked == true ? recruitmentSystem.GetContractors().Where(c => !c.IsAssigned): recruitmentSystem.GetContractors();
+            var contractorsToShow = ChkShowAvailable.IsChecked == true ? recruitmentSystem.GetAvailableContractors() : recruitmentSystem.GetContractors();
 
             LvContractors.ItemsSource = contractorsToShow;
 
@@ -180,7 +180,7 @@ namespace recruitment
             LvJobs.ItemsSource = null;
 
             // If checkbox is checked, filter only unassigned contractors
-            var jobsToShow = ChkShowUnassignedJobs.IsChecked == true ? recruitmentSystem.GetJobs().Where(j => j.AssignedContractor == null && !j.IsCompleted) : recruitmentSystem.GetJobs();
+            var jobsToShow = ChkShowUnassignedJobs.IsChecked == true ? recruitmentSystem.GetUnassignedJobs() : recruitmentSystem.GetJobs();
 
             LvJobs.ItemsSource = jobsToShow;
         }
@@ -230,6 +230,7 @@ namespace recruitment
        {
            string title = TxtJobTitle.Text?.Trim() ?? string.Empty;
            string desc = TxtJobDescription.Text?.Trim() ?? string.Empty;
+           DateTime date = DpStartDate.SelectedDate ?? DateTime.Now;
            string costText = TxtJobCost.Text?.Trim() ?? string.Empty;
 
            if (string.IsNullOrWhiteSpace(title))
@@ -244,17 +245,15 @@ namespace recruitment
                return;
            }
 
-
-
-            recruitmentSystem.AddJob(new Job(title, desc, cost));
+            recruitmentSystem.AddJob(new Job(title, desc, date, cost));
 
             MessageBox.Show("Job added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
 
             // clear inputs
             TxtJobTitle.Text = "";
-           TxtJobDescription.Text = "";
-           TxtJobCost.Text = "";
+            TxtJobDescription.Text = "";
+            TxtJobCost.Text = "";
 
             RefreshContractors();
             RefreshJobs();
@@ -297,7 +296,6 @@ namespace recruitment
             RefreshContractors();
             RefreshJobs();
         }
-        /*
        /// Set selected job as completed and return contractor to unassigned contractors.
        private void BtnCompleteJob_Click(object sender, RoutedEventArgs e)
        {
@@ -327,20 +325,19 @@ namespace recruitment
                return;
            }
 
-           // complete job
-           selectedJob.CompletedAt = DateTime.Now;
+            // complete job
 
-           // if a contractor was assigned, unassign them
-           if (selectedJob.AssignedContractor != null)
-           {
-               selectedJob.AssignedContractor.IsAssigned = false;
-               selectedJob.AssignedContractor = null;
-           }
+            recruitmentSystem.CompleteJob(
+                    selectedJob,
+                    selectedJob.AssignedContractor
+                );
 
-           RefreshAvailableContractors();
-           RefreshUnassignedJobs();
+            MessageBox.Show("Job completed!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            RefreshContractors();
+            RefreshJobs();
+
        }
-        */
         #endregion
         /*
        #region Filters & Search
