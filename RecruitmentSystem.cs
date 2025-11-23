@@ -29,11 +29,17 @@ namespace recruitment
             Contractors.Add(person);
 
         }
+        public void RemoveContractor(Contractor contractor)
+        {
+            Contractors.Remove(contractor);
+        }
 
         public List<Contractor> GetContractors()
         {
             return Contractors;
         }
+
+
 
         public List<Contractor> GetAvailableContractors()
         {

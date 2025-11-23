@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.DirectoryServices.ActiveDirectory;
 using System.Globalization;
 using System.Text;
@@ -189,7 +190,7 @@ namespace recruitment
             RefreshJobs();
         }
 
-        /*
+        
         /// Remove selected contractor if they are not currently assigned to a job.
         private void BtnRemoveContractor_Click(object sender, RoutedEventArgs e)
         {
@@ -207,18 +208,21 @@ namespace recruitment
                 return;
             }
 
-            if (MessageBox.Show($"Remove contractor {selected.DisplayName}?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show($"Remove contractor {selected.FirstName} {selected.LastName}?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                _contractors.Remove(selected);
+                recruitmentSystem.RemoveContractor(selected);
             }
 
-            RefreshAvailableContractors();
-            RefreshUnassignedJobs();
+            MessageBox.Show("Contractor added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            RefreshContractors();
+            RefreshJobs();
         }
-        */
+
         #endregion
 
         #region Job management
+        
         /// <summary>
         /// Create a new job from UI inputs. Includes validation.
         /// </summary>
