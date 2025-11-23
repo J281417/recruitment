@@ -89,17 +89,8 @@ namespace recruitment
 
         public List<Job> GetJobByCost(decimal minCost, decimal maxCost)
         {
-            List<Job> jobsByCost = new List<Job>();
+            return Jobs.Where(j => j.Cost >= minCost && j.Cost <= maxCost).ToList();
 
-            foreach (Job job in Jobs)
-            {
-                if (job.Cost >= minCost && job.Cost <= maxCost)
-                {
-                    jobsByCost.Add(job);
-                }
-            }
-
-            return jobsByCost;
         }
 
 

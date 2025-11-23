@@ -401,12 +401,14 @@ namespace recruitment
                     minVal,
                     maxVal
                 );
-            LvReports.ItemsSource = searchResult;
 
             if (searchResult.Count == 0)
             {
                 MessageBox.Show("No jobs found in that cost range.", "Report", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+
+            LvReports.ItemsSource = searchResult;
+
        }
        #endregion*/
 
