@@ -7,7 +7,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1080">
-    
+
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
@@ -38,61 +38,57 @@
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Search:"/>
-                            <!--<TextBox x:Name="TxtSearchContractors" Width="200" Margin="0,5,5,5"  TextChanged="TxtSearchContractors_TextChanged"/>-->
-                            <TextBox x:Name="TxtSearchContractors" Width="200" Margin="0,5,5,5"  />
+                            <TextBox x:Name="TxtSearchContractors" Width="200" Margin="0,5,5,5"  TextChanged="TxtSearchContractors_TextChanged"/>
                             <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                                 <Button x:Name="BtnRemoveContractor" Content="Remove Selected" Width="150" Click="BtnRemoveContractor_Click" Margin="0,5,0,5"/>
-                                <!--<Button x:Name="BtnRemoveContractor" Content="Remove Selected" Width="150" Margin="0,5,0,5"/>-->
                             </StackPanel>
                         </StackPanel>
-                        
+
                         <StackPanel Orientation="Horizontal">
                             <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
-                            <Expander Header="Add Contractor" IsExpanded="False" Margin="10,0,10,0"  Width="275">
-                                <StackPanel Orientation="Vertical" Margin="0,5,0,5">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Label Content="First Name:"/>
-                                        <TextBox x:Name="TxtFirstName" Width="200" Margin="0,0,5,5"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Label Content="Last Name:"/>
-                                        <TextBox x:Name="TxtLastName" Width="200" Margin="0,0,5,5"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,5,5">
-                                        <Label Content="Start Date:"/>
-                                        <DatePicker x:Name="DpStartDate" Width="100" SelectedDate="{x:Static sys:DateTime.Now}"/>
-                                    </StackPanel>
+                                <Expander Header="Add Contractor" IsExpanded="False" Margin="10,0,10,0"  Width="275">
+                                    <StackPanel Orientation="Vertical" Margin="0,5,0,5">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="First Name:"/>
+                                            <TextBox x:Name="TxtFirstName" Width="200" Margin="0,0,5,5"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="Last Name:"/>
+                                            <TextBox x:Name="TxtLastName" Width="200" Margin="0,0,5,5"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,5,5">
+                                            <Label Content="Start Date:"/>
+                                            <DatePicker x:Name="DpStartDate" Width="100" SelectedDate="{x:Static sys:DateTime.Now}"/>
+                                        </StackPanel>
 
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,5,5">
-                                        <Label Content="Hourly Wage ($):"/>
-                                        <TextBox x:Name="TxtHourlyWage" Width="100"/>
-                                    </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,5,5">
+                                            <Label Content="Hourly Wage ($):"/>
+                                            <TextBox x:Name="TxtHourlyWage" Width="100"/>
+                                        </StackPanel>
 
 
-                                    <Button x:Name="BtnAddContractor" Content="Add Contractor" Width="150" Click="BtnAddContractor_Click"/>
-                                        <!--<Button x:Name="BtnAddContractor" Content="Add Contractor" Width="150"/>-->
+                                        <Button x:Name="BtnAddContractor" Content="Add Contractor" Width="150" Click="BtnAddContractor_Click"/>
                                     </StackPanel>
-                            </Expander>
+                                </Expander>
                             </Border>
                             <StackPanel Orientation="Horizontal" Margin="5">
                                 <CheckBox x:Name="ChkShowAvailable" Content="Available" Checked="ChkShowAvailable_Changed" Unchecked="ChkShowAvailable_Changed"/>
-                                <!--<CheckBox x:Name="ChkShowAvailable" Content="Available" />-->
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
-            
-                    <ListView x:Name="LvContractors" Grid.Row="1" Margin="5" SelectionMode="Single">
-                        <ListView.View>
-                            <GridView>
+
+                <ListView x:Name="LvContractors" Grid.Row="1" Margin="5" SelectionMode="Single">
+                    <ListView.View>
+                        <GridView>
                             <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" Width="75"/>
                             <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" Width="75"/>
                             <GridViewColumn Header="Start Date" DisplayMemberBinding="{Binding StartDate, StringFormat={}{0:dd/MM/yyyy}}" Width="75"/>
                             <GridViewColumn Header="Wage (/hr)" DisplayMemberBinding="{Binding HourlyWage, StringFormat={}{0:F2}}" Width="100"/>
                             <GridViewColumn Header="Assigned" DisplayMemberBinding="{Binding IsAssigned}" Width="100"/>
                         </GridView>
-                        </ListView.View>
-                    </ListView>
+                    </ListView.View>
+                </ListView>
             </Grid>
         </GroupBox>
 
@@ -105,11 +101,10 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" Margin="5">
-                   <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Search:"/>
-                            <!--<TextBox x:Name="TxtSearchJobs" Width="150" Margin="0,5,5,5"  TextChanged="TxtSearchJobs_TextChanged"/>-->
-                            <TextBox x:Name="TxtSearchJobs" Width="150" Margin="0,5,5,5" />
+                            <TextBox x:Name="TxtSearchJobs" Width="150" Margin="0,5,5,5"  TextChanged="TxtSearchJobs_TextChanged"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal">
@@ -133,18 +128,14 @@
                                             <DatePicker x:Name="DpJobDate" Width="100" SelectedDate="{x:Static sys:DateTime.Now}"/>
                                         </StackPanel>
                                         <Button x:Name="BtnCreateJob" Content="Create Job" Width="200" Click="BtnCreateJob_Click"/>
-                                        <!--<Button x:Name="BtnCreateJob" Content="Create Job" Width="200"/>-->
                                     </StackPanel>
                                 </Expander>
                             </Border>
                             <StackPanel Orientation="Horizontal" Margin="5">
                                 <StackPanel Orientation="Vertical">
                                     <Button x:Name="BtnAssign" Content="Assign Contractor to Job" Width="250" Click="BtnAssign_Click" Margin="0,0,5,5"/>
-                                    <!--<Button x:Name="BtnAssign" Content="Assign Contractor to Job" Width="250"  Margin="0,0,5,5"/>-->
-                                    <!--<Button x:Name="BtnCompleteJob" Content="Complete Selected Job" Width="250" Click="BtnCompleteJob_Click"  Margin="0,0,5,5"/>-->
-                                    <Button x:Name="BtnCompleteJob" Content="Complete Selected Job" Width="250"  Margin="0,0,5,5"/>
+                                    <Button x:Name="BtnCompleteJob" Content="Complete Selected Job" Width="250" Click="BtnCompleteJob_Click"  Margin="0,0,5,5"/>
                                     <CheckBox x:Name="ChkShowUnassignedJobs" Content="Unassigned" Checked="ChkShowUnassignedJobs_Changed" Unchecked="ChkShowUnassignedJobs_Changed"  Margin="0,0,5,5"/>
-                                    <!--<CheckBox x:Name="ChkShowUnassignedJobs" Content="Unassigned" Margin="0,0,5,5"/> -->
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -156,6 +147,7 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Title" Width="160" DisplayMemberBinding="{Binding Title}"/>
+                            <GridViewColumn Header="Date" Width="80" DisplayMemberBinding="{Binding Date, StringFormat={}{0:dd/MM/yyyy}}"/>
                             <GridViewColumn Header="Cost" Width="80" DisplayMemberBinding="{Binding Cost}"/>
                             <GridViewColumn Header="Assigned To" Width="160" DisplayMemberBinding="{Binding AssignedContractorName}"/>
                             <GridViewColumn Header="Completed" Width="75" DisplayMemberBinding="{Binding IsCompleted}"/>
@@ -187,17 +179,23 @@
                                 <TextBox x:Name="TxtCostMax" Width="75" Margin="0,0,5,5"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <!--<Button x:Name="BtnSearchCost" Content="Search" Click="BtnSearchCost_Click" Margin="5,0,5,5"/>-->
-                                <Button x:Name="BtnSearchCost" Content="Search" Margin="5,0,5,5"/>
+                                <Button x:Name="BtnSearchCost" Content="Search" Click="BtnSearchCost_Click" Margin="5,0,5,5"/>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Report Result -->
-                <StackPanel x:Name="SpReport" Grid.Column="1">
-                    <ListBox x:Name="LbCostResults" Height="{Binding ActualHeight, ElementName=SpReport}" Width="{Binding ActualWidth, ElementName=SpReport}"   DisplayMemberPath="Title"/>
-                </StackPanel>
+                <ListView x:Name="LvReports" Margin="10,0,10,0" SelectionMode="Single" Grid.Column="1">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Title" Width="160" DisplayMemberBinding="{Binding Title}"/>
+                            <GridViewColumn Header="Date" Width="80" DisplayMemberBinding="{Binding Date, StringFormat={}{0:dd/MM/yyyy}}"/>
+                            <GridViewColumn Header="Cost" Width="80" DisplayMemberBinding="{Binding Cost}"/>
+                            <GridViewColumn Header="Assigned To" Width="160" DisplayMemberBinding="{Binding AssignedContractorName}"/>
+                            <GridViewColumn Header="Completed" Width="75" DisplayMemberBinding="{Binding IsCompleted}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </Grid>
         </GroupBox>
     </Grid>
