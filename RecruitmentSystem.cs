@@ -41,6 +41,9 @@ namespace recruitment
             if (string.IsNullOrWhiteSpace(person.LastName))
                 throw new ArgumentException("Last name required.");
 
+            if (person.HourlyWage <= 0)
+                throw new ArgumentException("Wage must be greater than zero.");
+
             Contractors.Add(person);
 
         }

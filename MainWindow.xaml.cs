@@ -99,7 +99,7 @@ namespace recruitment
                 return;
             }
 
-            if (!decimal.TryParse(TxtHourlyWage.Text, out decimal wage))
+            if (!decimal.TryParse(TxtHourlyWage.Text, out decimal wage) || wage <= 0 )
             {
                 MessageBox.Show("Please enter a valid hourly wage.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
