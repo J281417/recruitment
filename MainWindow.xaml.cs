@@ -19,44 +19,18 @@ using System.Windows.Shapes;
 namespace recruitment
 {
     public partial class MainWindow : Window
-    {
-        // Collections that hold the data model instances.
-        /* private ObservableCollection<Contractor> _contractors = new ObservableCollection<Contractor>();
-         private ObservableCollection<Contractor> _availableContractors = new ObservableCollection<Contractor>();
-         private ObservableCollection<Job> _jobs = new ObservableCollection<Job>();
-         private ObservableCollection<Job> _unassignedJobs = new ObservableCollection<Job>();
-        */
-        
+    {        
         public RecruitmentSystem recruitmentSystem;
-
-        // Views used for filtering and binding to UI elements.
-        //private ICollectionView _contractorsView;
-        //private ICollectionView _jobsView;
-
 
         public MainWindow()
         {
             InitializeComponent();
-
             recruitmentSystem = new RecruitmentSystem();
 
-            // Create collection views to support filtering.
-            /*_contractorsView = CollectionViewSource.GetDefaultView(_availableContractors);
-            _jobsView = CollectionViewSource.GetDefaultView(_unassignedJobs);
-
-
-            // Setup bindings
-            LvContractors.ItemsSource = _contractorsView;
-            LvJobs.ItemsSource = _jobsView;*/
-
-
-            // Seed some sample data (optional - helpful for testing)
+            // Seed some sample data
             SeedSampleData();
             RefreshContractors();
             RefreshJobs();
-
-            //RefreshAvailableContractors();
-            //RefreshUnassignedJobs()
         }
 
         #region Sample Data (for testing/demo)
@@ -97,9 +71,16 @@ namespace recruitment
         }
         #endregion
 
-        
+
         #region Contractor management
-        /// Add a contractor from the UI inputs after validating user input.
+
+        /// <summary>
+        /// Handles the Add Contractor button click event.
+        /// Validates the user's input from the UI, creates a new contractor,
+        /// adds it to the recruitment system, and updates the UI.
+        /// </summary>
+        /// <param name="sender">The button that was clicked.</param>
+        /// <param name="e">Event arguments for the click event.</param>
         private void BtnAddContractor_Click(object sender, RoutedEventArgs e)
         {
             // Validate input
@@ -144,42 +125,63 @@ namespace recruitment
 
         }
 
+        /// <summary>
+        /// Refreshes the contractors ListView on the UI.
+        /// Shows either all contractors or only available contractors
+        /// depending on the state of the "Available" checkbox.
+        /// </summary>
         private void RefreshContractors()
         {
             LvContractors.ItemsSource = null;
-
-            // If checkbox is checked, filter only unassigned contractors
             var contractorsToShow = ChkShowAvailable.IsChecked == true ? recruitmentSystem.GetAvailableContractors() : recruitmentSystem.GetContractors();
-
             LvContractors.ItemsSource = contractorsToShow;
-
         }
-        
+
+        /// <summary>
+        /// Handles the Checked and Unchecked events of the "Available" checkbox.
+        /// Updates the contractors ListView to show either all contractors
+        /// or only available contractors depending on the checkbox state.
+        /// </summary>
+        /// <param name="sender">The checkbox that triggered the event.</param>
+        /// <param name="e">Event arguments for the checked/unchecked event.</param>
         private void ChkShowAvailable_Changed(object sender, RoutedEventArgs e)
         {
-
-
             RefreshContractors();
-
         }
-        
+
+        /// <summary>
+        /// Refreshes the jobs ListView on the UI.
+        /// Shows either all jobs or only unassigned jobs depending on 
+        /// the state of the "Unassigned" checkbox.
+        /// </summary>
         private void RefreshJobs()
         {
             LvJobs.ItemsSource = null;
-
-            // If checkbox is checked, filter only unassigned contractors
             var jobsToShow = ChkShowUnassignedJobs.IsChecked == true ? recruitmentSystem.GetUnassignedJobs() : recruitmentSystem.GetJobs();
-
             LvJobs.ItemsSource = jobsToShow;
         }
 
+        /// <summary>
+        /// Handles the Checked and Unchecked events of the "Unassigned" checkbox.
+        /// Updates the jobs ListView to show either all jobs or only unassigned jobs
+        /// depending on the checkbox state.
+        /// </summary>
+        /// <param name="sender">The checkbox that triggered the event.</param>
+        /// <param name="e">Event arguments for the checked/unchecked event.</param>
         private void ChkShowUnassignedJobs_Changed(object sender, RoutedEventArgs e)
         {
             RefreshJobs();
         }
 
-        
-        /// Remove selected contractor if they are not currently assigned to a job.
+
+        /// <summary>
+        /// Handles the click event for the "Remove Contractor" button.
+        /// Validates that a contractor is selected and not currently assigned to a job,
+        /// confirms the removal with the user, then removes the contractor from the system
+        /// and refreshes the UI.
+        /// </summary>
+        /// <param name="sender">The button that was clicked.</param>
+        /// <param name="e">Event arguments for the click event.</param>
         private void BtnRemoveContractor_Click(object sender, RoutedEventArgs e)
         {
             Contractor selected = (Contractor)LvContractors.SelectedItem;
@@ -210,10 +212,13 @@ namespace recruitment
         #endregion
 
         #region Job management
-        
         /// <summary>
-        /// Create a new job from UI inputs. Includes validation.
+        /// Handles the click event for the "Create Job" button.
+        /// Validates the user's input from the UI, creates a new job,
+        /// adds it to the recruitment system, and updates the UI.
         /// </summary>
+        /// <param name="sender">The button that was clicked.</param>
+        /// <param name="e">Event arguments for the click event.</param>
         private void BtnCreateJob_Click(object sender, RoutedEventArgs e)
        {
            string title = TxtJobTitle.Text?.Trim() ?? string.Empty;
@@ -237,8 +242,6 @@ namespace recruitment
 
             MessageBox.Show("Job added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-
-            // clear inputs
             TxtJobTitle.Text = "";
             TxtJobDescription.Text = "";
             TxtJobCost.Text = "";
@@ -247,9 +250,16 @@ namespace recruitment
             RefreshJobs();
 
         }
-        
-       /// Assign selected contractor to selected job.
-       private void BtnAssign_Click(object sender, RoutedEventArgs e)
+
+        /// <summary>
+        /// Handles the click event for the "Assign Contractor to Job" button.
+        /// Validates that both a contractor and a job are selected, checks that
+        /// the contractor is available and the job is unassigned, then assigns
+        /// the contractor to the job and updates the UI.
+        /// </summary>
+        /// <param name="sender">The button that was clicked.</param>
+        /// <param name="e">Event arguments for the click event.</param>
+        private void BtnAssign_Click(object sender, RoutedEventArgs e)
        {
            Contractor selectedContractor = (Contractor)LvContractors.SelectedItem;
            Job selectedJob = (Job)LvJobs.SelectedItem;
@@ -272,8 +282,6 @@ namespace recruitment
                return;
            }
 
-            // assign contractor to job
-
             recruitmentSystem.AssignJob(
                     selectedJob,
                     selectedContractor
@@ -284,8 +292,15 @@ namespace recruitment
             RefreshContractors();
             RefreshJobs();
         }
-       /// Set selected job as completed and return contractor to unassigned contractors.
-       private void BtnCompleteJob_Click(object sender, RoutedEventArgs e)
+
+        /// <summary>
+        /// Handles the click event for the "Complete Selected Job" button.
+        /// Validates that a job is selected, has an assigned contractor, and is not already completed.
+        /// Marks the job as completed, frees up the contractor, and updates the UI.
+        /// </summary>
+        /// <param name="sender">The button that was clicked.</param>
+        /// <param name="e">Event arguments for the click event.</param>
+        private void BtnCompleteJob_Click(object sender, RoutedEventArgs e)
        {
            Job selectedJob = (Job)LvJobs.SelectedItem;
 
@@ -313,8 +328,6 @@ namespace recruitment
                return;
            }
 
-            // complete job
-
             recruitmentSystem.CompleteJob(
                     selectedJob,
                     selectedJob.AssignedContractor
@@ -333,8 +346,14 @@ namespace recruitment
 
 
 
-       /// Filter for contractor listbox.
-       private void TxtSearchContractors_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        /// <summary>
+        /// Handles the TextChanged event for the contractor search TextBox.
+        /// Filters the contractor list based on the user's search input, 
+        /// matching against first and last names, and updates the ListView.
+        /// </summary>
+        /// <param name="sender">The TextBox where text was changed.</param>
+        /// <param name="e">Event arguments for the text changed event.</param>
+        private void TxtSearchContractors_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
        {
 
             
@@ -354,8 +373,14 @@ namespace recruitment
 
        }
 
-       /// Filter for Jobs listbox.
-       private void TxtSearchJobs_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        /// <summary>
+        /// Handles the TextChanged event for the job search TextBox.
+        /// Filters the job list based on the user's search input by matching
+        /// against job titles, and updates the ListView.
+        /// </summary>
+        /// <param name="sender">The TextBox where text was changed.</param>
+        /// <param name="e">Event arguments for the text changed event.</param>
+        private void TxtSearchJobs_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
        {
            string search = TxtSearchJobs.Text?.Trim().ToLowerInvariant() ?? string.Empty;
 
@@ -371,10 +396,16 @@ namespace recruitment
             LvJobs.ItemsSource = jobsToShow;
 
        }
-              
 
-       /// Search jobs by cost range (report).
-       private void BtnSearchCost_Click(object sender, RoutedEventArgs e)
+
+        /// <summary>
+        /// Handles the click event for the "Search" button in the cost filter section.
+        /// Retrieves the minimum and maximum cost values from the UI, validates them,
+        /// and displays jobs within the specified cost range in the report ListView.
+        /// </summary>
+        /// <param name="sender">The button that was clicked.</param>
+        /// <param name="e">Event arguments for the click event.</param>
+        private void BtnSearchCost_Click(object sender, RoutedEventArgs e)
        {
            LvReports.ItemsSource = null;
 
@@ -394,14 +425,11 @@ namespace recruitment
                return;
            }
 
-
             // Show search result
-
             var searchResult = recruitmentSystem.GetJobByCost(
                     minVal,
                     maxVal
                 );
-
             if (searchResult.Count == 0)
             {
                 MessageBox.Show("No jobs found in that cost range.", "Report", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -410,7 +438,7 @@ namespace recruitment
             LvReports.ItemsSource = searchResult;
 
        }
-       #endregion*/
+       #endregion
 
     }
 }
